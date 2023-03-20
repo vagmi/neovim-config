@@ -1,5 +1,8 @@
 local lsp = require("lsp-zero")
 local rt = require("rust-tools")
+local expand_macro = require("rust-tools.expand_macro")
+local rt_utils = require("rust-tools.utils.utils")
+rt.utils = rt_utils
 
 lsp.preset("recommended")
 
@@ -34,7 +37,7 @@ lsp.configure('lua-language-server', {
 
 
 local cmp = require('cmp')
-local ih = require('inlay-hints')
+local ih = require("inlay-hints")
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -81,22 +84,17 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
   vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
   vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+  if client.name == 'rust_analyzer' then
+     vim.keymap.set("n", "<Leader>m", expand_macro.expand_macro, { buffer = bufnr })
+  end
 end)
 
-ih.setup()
-lsp.setup()
-
-rt.setup({
-  server = {
-    on_attach = function(_, bufnr)
-      -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-      -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-      vim.keymap.set("n", "<Leader>m", rt.expand_macro.expand_macro, { buffer = bufnr })
-    end,
-  },
+ih.setup({
+  eol = {
+    right_align = true,
+  }
 })
+lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
