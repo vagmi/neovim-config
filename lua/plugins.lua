@@ -66,7 +66,20 @@ return require('packer').startup(function()
             {'rafamadriz/friendly-snippets'},
         },
     }
-    use 'simrat39/rust-tools.nvim'
+
+    -- Debugging Support
+    use('mfussenegger/nvim-dap')
+    use {
+        'theHamsta/nvim-dap-virtual-text',
+        requires = {'mfussenegger/nvim-dap'}
+    }
+    use {
+        "rcarriga/nvim-dap-ui",
+        requires = {'mfussenegger/nvim-dap'}
+    }
+
+    -- currently used only for macro expansion
+    use 'simrat39/rust-tools.nvim' 
 
     use({
         "glepnir/lspsaga.nvim",
