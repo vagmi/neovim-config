@@ -22,6 +22,7 @@ vim.o.showtabline    = 2
 vim.o.signcolumn     = 'yes'
 vim.o.mouse          = 'a'
 vim.o.clipboard      = 'unnamedplus'
+vim.o.exrc           = true
 
 vim.api.nvim_set_keymap('n', 'vs', ':vs<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', 'sp', ':sp<CR>', { noremap = true })

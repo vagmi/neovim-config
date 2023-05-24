@@ -9,3 +9,4 @@ require('nvim-tree').setup({
 })
 
 vim.api.nvim_set_keymap("n", "<leader>x", ":NvimTreeToggle<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<leader>xf", ":NvimTreeFindFile<CR>", {noremap = true, silent = true})

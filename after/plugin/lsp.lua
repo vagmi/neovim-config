@@ -2,13 +2,13 @@ local lsp = require("lsp-zero")
 local rt = require("rust-tools")
 local expand_macro = require("rust-tools.expand_macro")
 local rt_utils = require("rust-tools.utils.utils")
+local util = require('lspconfig/util')
 rt.utils = rt_utils
 
 lsp.preset("recommended")
 
 lsp.ensure_installed({
   'tsserver',
-  'eslint',
   'lua_ls',
   'rust_analyzer',
   'kotlin_language_server',
@@ -88,6 +88,10 @@ lsp.on_attach(function(client, bufnr)
      vim.keymap.set("n", "<Leader>m", expand_macro.expand_macro, { buffer = bufnr })
   end
 end)
+
+require('lspconfig').tsserver.setup({
+    root_dir = util.root_pattern('.git')
+})
 
 ih.setup({
   eol = {

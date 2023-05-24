@@ -89,5 +89,6 @@ return require('packer').startup(function()
             require('lspsaga').setup({})
         end,
     })
+    use "github/copilot.vim"
 end)
 
