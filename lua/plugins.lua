@@ -66,6 +66,7 @@ return require('packer').startup(function()
             {'rafamadriz/friendly-snippets'},
         },
     }
+    use 'simrat39/symbols-outline.nvim'
 
     -- Debugging Support
     use('mfussenegger/nvim-dap')
