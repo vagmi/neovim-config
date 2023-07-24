@@ -38,6 +38,7 @@ vim.api.nvim_set_keymap('n', '<C-S>', ':%s/', { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>t", ":sp<CR> :term<CR> :resize 20N<CR> i", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<leader>tt", ':TroubleToggle<CR>', {noremap=true, silent=true})
+vim.api.nvim_set_keymap("n", "<F8>", ":SymbolsOutline<CR>", {noremap=true, silent=true})
 
 
 vim.g["netrw_banner"]    = 0

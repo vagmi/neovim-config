@@ -89,13 +89,13 @@ lsp.on_attach(function(client, bufnr)
   end
 end)
 
-require('lspconfig').tsserver.setup({
-    root_dir = util.root_pattern('.git')
-})
+-- require('lspconfig').tsserver.setup({
+--     root_dir = util.root_pattern('.git')
+-- })
 
 ih.setup({
   eol = {
-    right_align = true,
+    right_align = false,
   }
 })
 lsp.setup()

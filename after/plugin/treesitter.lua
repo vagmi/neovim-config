@@ -1,3 +1,6 @@
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+
+
  require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
   ensure_installed = { "help", "javascript", "typescript", "c", "lua", "rust", "kotlin" },
@@ -20,6 +23,15 @@
     additional_vim_regex_highlighting = false,
   },
 }
+parser_config.psql = {
+    install_info = {
+        url = "https://github.com/m-novikov/tree-sitter-sql",
+        branch = "main",
+        files = {"src/parser.c", "src/scanner.cc"}, -- note that some parsers also require src/scanner.c or src/scanner.cc
+    },
+  filetype = "sql", -- if filetype does not match the parser name
+}
+require("nvim-treesitter.install").prefer_git = true
 
 vim.o.foldmethod='expr'
 vim.o.foldexpr='nvim_treesitter#foldexpr()'
