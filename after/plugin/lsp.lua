@@ -1,3 +1,4 @@
+require('mason').setup({})
 local lsp = require("lsp-zero")
 local rt = require("rust-tools")
 local expand_macro = require("rust-tools.expand_macro")
@@ -7,17 +8,24 @@ rt.utils = rt_utils
 
 lsp.preset("recommended")
 
-lsp.ensure_installed({
-  'tsserver',
-  'lua_ls',
-  'rust_analyzer',
-  'kotlin_language_server',
-  'solargraph'
+
+require('mason-lspconfig').setup({
+    -- Replace the language servers listed here 
+    -- with the ones you want to install
+    ensure_installed = {
+        'tsserver',
+        'lua_ls',
+        'rust_analyzer',
+        'kotlin_language_server',
+    },
+    handlers = {
+        lsp.default_setup,
+    },
 })
 
 print(vim.split(package.path, ';'))
 -- Fix Undefined global 'vim'
-lsp.configure('lua-language-server', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
@@ -35,25 +43,26 @@ lsp.configure('lua-language-server', {
     }
 })
 
-
 local cmp = require('cmp')
-local ih = require("inlay-hints")
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
+local cmp_action = lsp.cmp_action()
+
+cmp.setup({
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+        ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+        ["<Tab>"] = cmp_action.luasnip_supertab(),
+        ["<S-Tab>"] = cmp_action.luasnip_shift_supertab(),
+    })
 })
 
--- disable completion with tab
--- this helps with copilot setup
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
-})
 
 lsp.set_preferences({
     suggest_lsp_servers = false,
@@ -66,13 +75,15 @@ lsp.set_preferences({
 })
 
 
+-- local ih = require("inlay-hints")
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
-  ih.on_attach(client, bufnr)
+  -- ih.on_attach(client, bufnr)
   if client.name == "eslint" then
       vim.cmd.LspStop('eslint')
       return
   end
+  vim.lsp.inlay_hint(bufnr, true)
 
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -93,15 +104,15 @@ end)
 --     root_dir = util.root_pattern('.git')
 -- })
 
-ih.setup({
-  eol = {
-    right_align = false,
-  }
-})
+-- ih.setup({
+--   eol = {
+--     right_align = false,
+--   }
+-- })
 lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
 })
-vim.o.winbar = require('lspsaga.symbolwinbar'):get_winbar()
+-- vim.o.winbar = require('lspsaga.symbolwinbar'):get_winbar()
 require("luasnip.loaders.from_lua").load({paths = "~/.config/snippets"})

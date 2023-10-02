@@ -3,7 +3,7 @@ local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 
  require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "help", "javascript", "typescript", "c", "lua", "rust", "kotlin" },
+  ensure_installed = { "javascript", "typescript", "c", "lua", "rust", "kotlin" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
