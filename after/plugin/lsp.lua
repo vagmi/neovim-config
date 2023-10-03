@@ -32,12 +32,17 @@ lsp.configure('lua_ls', {
             completion = {enable = true, callSnippet = "Both"},
             diagnostics = {
                 enable = true,
-                globals = {'vim', 'describe'},
+                globals = {'vim'},
                 disable = {"lowercase-global"}
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files
-                library = {[vim.fn.expand('$VIMRUNTIME/lua')] = true, [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true}
+                checkThirdParty = false,
+                library = {
+                    vim.env.VIMRUNTIME .. '/lua',
+                    vim.env.VIMRUNTIME .. '/lua/vim',
+                    vim.env.VIMRUNTIME .. '/lua/vim/lsp'
+                }
             }
         }
     }
@@ -58,8 +63,6 @@ cmp.setup({
         ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-d>'] = cmp.mapping.scroll_docs(4),
         ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-        ["<Tab>"] = cmp_action.luasnip_supertab(),
-        ["<S-Tab>"] = cmp_action.luasnip_shift_supertab(),
     })
 })
 
@@ -74,11 +77,8 @@ lsp.set_preferences({
     }
 })
 
-
--- local ih = require("inlay-hints")
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr, remap = false}
-  -- ih.on_attach(client, bufnr)
   if client.name == "eslint" then
       vim.cmd.LspStop('eslint')
       return
@@ -100,19 +100,10 @@ lsp.on_attach(function(client, bufnr)
   end
 end)
 
--- require('lspconfig').tsserver.setup({
---     root_dir = util.root_pattern('.git')
--- })
-
--- ih.setup({
---   eol = {
---     right_align = false,
---   }
--- })
 lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
 })
--- vim.o.winbar = require('lspsaga.symbolwinbar'):get_winbar()
+
 require("luasnip.loaders.from_lua").load({paths = "~/.config/snippets"})
