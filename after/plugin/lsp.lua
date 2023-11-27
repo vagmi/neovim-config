@@ -41,7 +41,8 @@ lsp.configure('lua_ls', {
                 library = {
                     vim.env.VIMRUNTIME .. '/lua',
                     vim.env.VIMRUNTIME .. '/lua/vim',
-                    vim.env.VIMRUNTIME .. '/lua/vim/lsp'
+                    vim.env.VIMRUNTIME .. '/lua/vim/lsp',
+                    require('packer').config.package_root
                 }
             }
         }
@@ -83,7 +84,7 @@ lsp.on_attach(function(client, bufnr)
       vim.cmd.LspStop('eslint')
       return
   end
-  vim.lsp.inlay_hint(bufnr, true)
+  vim.lsp.inlay_hint.enable(bufnr, true)
 
   vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)

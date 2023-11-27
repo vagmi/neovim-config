@@ -91,5 +91,11 @@ return require('packer').startup(function()
         end,
     })
     use "github/copilot.vim"
+    use "MunifTanjim/nui.nvim"
+    use ({
+        "Bryley/neoai.nvim",
+        require = { "MunifTanjim/nui.nvim" },
+        opt = false
+    })
 end)
 
