@@ -15,6 +15,7 @@ return require('packer').startup(function()
     use 'JoosepAlviste/nvim-ts-context-commentstring'
     use 'klen/nvim-test'
     use 'nvim-tree/nvim-web-devicons'
+    use 'rafcamlet/nvim-luapad'
     use {
         "mcchrish/zenbones.nvim",
         requires = "rktjmp/lush.nvim"
@@ -90,12 +91,20 @@ return require('packer').startup(function()
             require('lspsaga').setup({})
         end,
     })
-    use "github/copilot.vim"
+    -- use "github/copilot.vim"
     use "MunifTanjim/nui.nvim"
     use ({
         "Bryley/neoai.nvim",
         require = { "MunifTanjim/nui.nvim" },
         opt = false
     })
+    use "zbirenbaum/copilot.lua"
+    use {
+      "zbirenbaum/copilot-cmp",
+      after = { "copilot.lua" },
+      config = function ()
+        require("copilot_cmp").setup()
+      end
+    }
 end)
 

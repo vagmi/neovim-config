@@ -5,8 +5,12 @@ local expand_macro = require("rust-tools.expand_macro")
 local rt_utils = require("rust-tools.utils.utils")
 local util = require('lspconfig/util')
 rt.utils = rt_utils
+require("copilot").setup({
+  suggestion = { enabled = false },
+  panel = { enabled = false },
+})
 
-lsp.preset("recommended")
+-- lsp.preset("recommended")
 
 
 require('mason-lspconfig').setup({
@@ -23,7 +27,6 @@ require('mason-lspconfig').setup({
     },
 })
 
-print(vim.split(package.path, ';'))
 -- Fix Undefined global 'vim'
 lsp.configure('lua_ls', {
     settings = {
@@ -51,20 +54,31 @@ lsp.configure('lua_ls', {
 
 local cmp = require('cmp')
 local cmp_action = lsp.cmp_action()
+cmp_mappings = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+})
+-- cmp_mappings['<Tab>'] = nil
+-- cmp_mappings['<S-Tab>'] = nil
 
 cmp.setup({
     window = {
         completion = cmp.config.window.bordered(),
         documentation = cmp.config.window.bordered(),
     },
-    mapping = cmp.mapping.preset.insert({
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-    })
+    mapping = cmp_mappings,
+    sources = {
+        -- Copilot Source
+        { name = "copilot", group_index = 2 },
+        -- Other Sources
+        { name = "nvim_lsp", group_index = 2 },
+        { name = "path", group_index = 2 },
+        { name = "luasnip", group_index = 2 },
+    },
 })
 
 

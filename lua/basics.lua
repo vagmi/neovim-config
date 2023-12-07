@@ -40,7 +40,6 @@ vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", {noremap = true, silent = t
 vim.api.nvim_set_keymap("n", "<leader>tt", ':TroubleToggle<CR>', {noremap=true, silent=true})
 vim.api.nvim_set_keymap("n", "<F8>", ":SymbolsOutline<CR>", {noremap=true, silent=true})
 
-
 vim.g["netrw_banner"]    = 0
 vim.g["netrw_liststyle"] = 3
 vim.g["netrw_winsize"]   = 25

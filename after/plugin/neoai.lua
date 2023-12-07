@@ -154,5 +154,4 @@ function generate_test()
     neoai.smart_toggle(prompt)
 end
 
-print('setting keymap')
 vim.api.nvim_set_keymap('n', '<leader>st', ':lua generate_test()<CR>', {})

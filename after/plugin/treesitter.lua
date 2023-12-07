@@ -31,6 +31,15 @@ parser_config.psql = {
     },
   filetype = "sql", -- if filetype does not match the parser name
 }
+
+parser_config.d2 = {
+  install_info = {
+    url = 'https://codeberg.org/p8i/tree-sitter-d2.git',
+    revision = 'main',
+    files = { 'src/parser.c', 'src/scanner.cc' },
+  },
+  filetype = 'd2',
+};
 require("nvim-treesitter.install").prefer_git = true
 
 vim.o.foldmethod='expr'
