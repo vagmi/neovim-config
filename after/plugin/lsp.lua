@@ -1,10 +1,12 @@
 require('mason').setup({})
 local lsp = require("lsp-zero")
 local rt = require("rust-tools")
+local installer = require("lsp-zero.installer")
 local expand_macro = require("rust-tools.expand_macro")
 local rt_utils = require("rust-tools.utils.utils")
-local util = require('lspconfig/util')
+
 rt.utils = rt_utils
+
 require("copilot").setup({
   suggestion = { enabled = false },
   panel = { enabled = false },
@@ -51,6 +53,8 @@ lsp.configure('lua_ls', {
         }
     }
 })
+lsp.setup_servers(installer.fn.get_servers())
+
 
 local cmp = require('cmp')
 local cmp_action = lsp.cmp_action()
