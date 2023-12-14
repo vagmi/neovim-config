@@ -1,18 +1,12 @@
 require('mason').setup({})
 local lsp = require("lsp-zero")
-local rt = require("rust-tools")
 local installer = require("lsp-zero.installer")
-local expand_macro = require("rust-tools.expand_macro")
-local rt_utils = require("rust-tools.utils.utils")
-
-rt.utils = rt_utils
+local expand_macro = require("expand_macro")
 
 require("copilot").setup({
-  suggestion = { enabled = false },
-  panel = { enabled = false },
+  -- suggestion = { enabled = false },
+  -- panel = { enabled = true },
 })
-
--- lsp.preset("recommended")
 
 
 require('mason-lspconfig').setup({
@@ -58,6 +52,13 @@ lsp.setup_servers(installer.fn.get_servers())
 
 local cmp = require('cmp')
 local cmp_action = lsp.cmp_action()
+
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
+
 cmp_mappings = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
@@ -65,6 +66,13 @@ cmp_mappings = cmp.mapping.preset.insert({
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+    ["<Tab>"] = vim.schedule_wrap(function(fallback)
+      if cmp.visible() and has_words_before() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      else
+        fallback()
+      end
+    end),
 })
 -- cmp_mappings['<Tab>'] = nil
 -- cmp_mappings['<S-Tab>'] = nil

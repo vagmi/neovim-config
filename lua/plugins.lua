@@ -4,7 +4,7 @@ return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
     use 'tpope/vim-fugitive'
     use 'pangloss/vim-javascript'
-    use 'Vonr/align.nvim'
+    use { 'echasnovski/mini.align', branch = 'stable' }
     use 'leafgarland/typescript-vim'
     use 'peitalin/vim-jsx-typescript'
     use 'mbbill/undotree'
@@ -79,9 +79,6 @@ return require('packer').startup(function()
         "rcarriga/nvim-dap-ui",
         requires = {'mfussenegger/nvim-dap'}
     }
-
-    -- currently used only for macro expansion
-    use 'simrat39/rust-tools.nvim' 
 
     use({
         "glepnir/lspsaga.nvim",
