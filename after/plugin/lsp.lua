@@ -47,6 +47,18 @@ lsp.configure('lua_ls', {
         }
     }
 })
+
+lsp.configure('rust_analyzer',  {
+    settings = {
+        ['rust-analyzer'] = {
+            -- read cargo features from env CARGO_FEATURES and split by comma
+            cargo = {
+                features = vim.split(vim.env.CARGO_FEATURES or "", ',')
+            },
+        }
+    }
+})
+
 lsp.setup_servers(installer.fn.get_servers())
 
 
