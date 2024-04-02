@@ -36,6 +36,11 @@ return require('packer').startup(function()
     }
     use({ "kelly-lin/telescope-ag", requires = { { "nvim-telescope/telescope.nvim" } } })
     use 'tpope/vim-surround'
+    use { "meatballs/notebook.nvim", 
+          config = function() 
+              require("notebook").setup() 
+          end
+        }
     use {
         "folke/trouble.nvim",
         requires = "nvim-tree/nvim-web-devicons",
@@ -73,7 +78,7 @@ return require('packer').startup(function()
     use('mfussenegger/nvim-dap')
     use {
         'theHamsta/nvim-dap-virtual-text',
-        requires = {'mfussenegger/nvim-dap'}
+        requires = {'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio'}
     }
     use {
         "rcarriga/nvim-dap-ui",
@@ -81,7 +86,7 @@ return require('packer').startup(function()
     }
 
     use({
-        "glepnir/lspsaga.nvim",
+        "nvimdev/lspsaga.nvim",
         requires = {'nvim-tree/nvim-web-devicons', opt=true},
         branch = "main",
         config = function()
@@ -91,7 +96,8 @@ return require('packer').startup(function()
     -- use "github/copilot.vim"
     use "MunifTanjim/nui.nvim"
     use ({
-        "Bryley/neoai.nvim",
+        "vagmi/neoai.nvim",
+        -- "~/work/opensource/neoai.nvim",
         require = { "MunifTanjim/nui.nvim" },
         opt = false
     })

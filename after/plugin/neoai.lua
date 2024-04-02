@@ -11,7 +11,9 @@ neoai.setup({
     models = {
         {
             name = "openai",
-            model = "gpt-3.5-turbo",
+            model = "magicoder",
+            -- model = "gpt-3.5-turbo-1106",
+            -- -- model = "gpt-4-1106-preview",
             params = nil,
         },
     },
@@ -37,6 +39,7 @@ neoai.setup({
         ["select_down"] = "<C-j>",
     },
     open_ai = {
+        api_base = "http://localhost:11434/v1/chat/completions",
         api_key = {
             env = "OPENAI_API_KEY",
             value = nil,
