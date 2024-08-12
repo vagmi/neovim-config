@@ -81,6 +81,19 @@ local function handler(_, result)
 
 end
 
+local function extract_function_handler(err, result, params, conf)
+    vim.print("error:", err)
+    vim.print("result: ", result)
+    vim.print("params: ", params)
+    vim.print("conf: ", conf)
+end
+
+function M.extract_function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local params = vim.lsp.util.make_range_params()
+    return vim.lsp.buf_request(bufnr, "extract_function", params, extract_function_handler)
+end
+
 -- Sends the request to rust-analyzer to get cargo.tomls location and open it
 function M.expand_macro()
     -- get current buffer
