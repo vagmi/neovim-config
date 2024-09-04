@@ -11,9 +11,25 @@ neoai.setup({
     models = {
         {
             name = "openai",
-            model = "magicoder",
+            -- >>>>> for ollama
+            -- model = "mistral:7b-instruct",
+            -- model = "codellama:13b-instruct",
+            -- model = "dolphin-llama3:8b-256k",
+            -- model = "magicoder",
+            -- model = "llama3:instruct",
+            --
+            -- >>>>>  for openai
             -- model = "gpt-3.5-turbo-1106",
-            -- -- model = "gpt-4-1106-preview",
+            -- model = "gpt-4-1106-preview",
+            model = "gpt-4o",
+            --
+            -- >>>>> for groq
+            -- model = "llama3-70b-8192",
+            -- model = "llama3-8b-8192",
+            --
+            -- >>>> for claude
+            -- name = "claude",
+            -- model = "claude-3-5-sonnet-20240620",
             params = nil,
         },
     },
@@ -39,11 +55,21 @@ neoai.setup({
         ["select_down"] = "<C-j>",
     },
     open_ai = {
-        api_base = "http://localhost:11434/v1/chat/completions",
+        -- api_base = "http://localhost:11434/v1/chat/completions",
+        -- api_base = 'https://api.groq.com/openai/v1/chat/completions',
+        -- api_base = "https://api.anthropic.com/v1/messages",
         api_key = {
             env = "OPENAI_API_KEY",
             value = nil,
         },
+        -- api_key = {
+        --     env = "CLAUDE_API_KEY",
+        --     value = nil,
+        -- },
+        -- api_key = {
+        --     env = "GROQ_API_KEY",
+        --     value = nil,
+        -- },
     },
     shortcuts = {
         {
@@ -101,13 +127,27 @@ function generate_test()
     local text = table.concat(lines, '\n')
 
     local prompt = [[ 
-        Given the content of the file below.
+        Here is an example of a unit test that uses sqlx.
+
+        ```
+        #[sqlx::text]
+        async fn test_get_user(pool: PgPool) {
+            let user = get_user(pool, 1).await.unwrap();
+            assert_eq!(user.id, 1);
+            assert_eq!(user.username, "user");
+        }
+        ```
+
+        Notice that I am using `sqlx::test` instead of `tokio::test`.
+        The `sqlx::test` macro injects a connection pool as a parameter to
+        the test and it sets up a new database. When generating a test you must
+        use `sqlx::test` instead of `tokio::test`. Read the file below and
+        generate the a test for the method specified.
 
         ```
     ]] .. text .. [[
       ```
-
-      Generate a test for the method 
+        Generate a test for the method below. Only give me the code. No explanation needed.
     ]]
 
     local parser = parsers.get_parser(bufnr)
@@ -134,6 +174,7 @@ function generate_test()
         end
         node = node:parent()
     end
+
     print('function_node', vim.treesitter.get_node_text(function_node:field('name')[1], bufnr))
     local function_name = function_node and vim.treesitter.get_node_text(function_node:field('name')[1], bufnr) or nil
     print('function_node', vim.treesitter.get_node_text(struct_node:field('type')[1], bufnr))

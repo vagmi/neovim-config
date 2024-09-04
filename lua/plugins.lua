@@ -72,7 +72,12 @@ return require('packer').startup(function()
             {'rafamadriz/friendly-snippets'},
         },
     }
-    use 'simrat39/symbols-outline.nvim'
+    use({
+        "stevearc/aerial.nvim",
+        config = function()
+            require("aerial").setup()
+        end,
+    })
 
     -- Debugging Support
     use('mfussenegger/nvim-dap')
@@ -109,5 +114,6 @@ return require('packer').startup(function()
         require("copilot_cmp").setup()
       end
     }
+    use {'stevearc/dressing.nvim'}
 end)
 
