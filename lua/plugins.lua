@@ -115,5 +115,57 @@ return require('packer').startup(function()
       end
     }
     use {'stevearc/dressing.nvim'}
+
+    use({
+        'MeanderingProgrammer/render-markdown.nvim',
+        after = { 'nvim-treesitter' },
+        requires = { 'echasnovski/mini.nvim', opt = true }, -- if you use the mini.nvim suite
+        -- requires = { 'echasnovski/mini.icons', opt = true }, -- if you use standalone mini plugins
+        -- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
+        config = function()
+            require('render-markdown').setup({})
+        end,
+    })
+
+    use {
+        'yetone/avante.nvim',
+        run = "make", -- or "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" for Windows
+        requires = {
+            'stevearc/dressing.nvim',
+            'nvim-lua/plenary.nvim',
+            'MunifTanjim/nui.nvim',
+            'nvim-tree/nvim-web-devicons', -- or 'echasnovski/mini.icons'
+            'zbirenbaum/copilot.lua',
+            {
+                'HakonHarnes/img-clip.nvim',
+                config = function()
+                    require('img-clip').setup({
+                        default = {
+                            embed_image_as_base64 = false,
+                            prompt_for_file_name = false,
+                            drag_and_drop = {
+                                insert_mode = true,
+                            },
+                            use_absolute_path = true,
+                        },
+                    })
+                end,
+            },
+            {
+                'MeanderingProgrammer/render-markdown.nvim',
+                config = function()
+                    require('render-markdown').setup({
+                        file_types = { "markdown", "Avante" },
+                    })
+                end,
+                ft = { "markdown", "Avante" },
+            },
+        },
+        config = function()
+            print('setting up avante.nvim')
+            require('avante_lib').load()
+            require('avante').setup()
+        end,
+    }
 end)
 
