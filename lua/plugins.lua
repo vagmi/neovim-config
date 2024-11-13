@@ -129,7 +129,7 @@ return require('packer').startup(function()
 
     use {
         'yetone/avante.nvim',
-        run = "make", -- or "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" for Windows
+        run = "BUILD_FROM_SOURCE=true make", -- latest greatest bleeding edge
         requires = {
             'stevearc/dressing.nvim',
             'nvim-lua/plenary.nvim',
