@@ -19,11 +19,11 @@ This is a comprehensive Neovim configuration written entirely in Lua, designed t
 
 ## Installation
 
-1. Ensure you have Neovim 0.5+ installed.
+1. Ensure you have Neovim 0.11+ installed. I simply use the HEAD and build from source.
 2. Back up your existing Neovim configuration if you have one.
 3. Clone this repository into your Neovim configuration directory:
    ```
-   git clone https://github.com/yourusername/neovim-config.git ~/.config/nvim
+   git clone https://github.com/vagmi/neovim-config.git ~/.config/nvim
    ```
 4. Install Packer:
    ```
@@ -37,7 +37,6 @@ This is a comprehensive Neovim configuration written entirely in Lua, designed t
 - Use `<leader>ff` to find files, `<leader>fg` for live grep, `<leader>fb` for buffer search.
 - `<leader>x` toggles the file explorer.
 - LSP features are automatically enabled for supported languages.
-- For AI assistance, use `<leader>as` in visual mode to improve text, `<leader>ag` to generate git commit messages.
 
 ## Customization
 

@@ -126,9 +126,18 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
         vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
         vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+        vim.keymap.set("n", "<leader>vws", vim.lsp.buf.workspace_symbol, opts)
+        vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, opts)
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_next, opts)
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_prev, opts)
+        vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("v", "<leader>vca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
+        vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+        vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set('n', '<Leader>vrn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
         vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+        vim.keymap.set('n', '<Leader>vca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 
         if client.name == 'rust_analyzer' then
             vim.keymap.set("n", "<Leader>m", expand_macro.expand_macro, { buffer = bufnr })
@@ -139,9 +148,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 lsp.setup()
 vim.lsp.inlay_hint.enable(true)
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+  },
+})
+
 
 vim.diagnostic.config({
     virtual_text = true,
 })
+
 
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/snippets" })
