@@ -1,5 +1,6 @@
 require('mason').setup({})
 local lsp = require("lsp-zero")
+local lspconfig = require('lspconfig')
 local lspconfig_defaults = require('lspconfig').util.default_config
 local expand_macro = require("expand_macro")
 
@@ -28,30 +29,6 @@ require('mason-lspconfig').setup({
     },
 })
 
--- Fix Undefined global 'vim'
-lsp.configure('lua_ls', {
-    settings = {
-        Lua = {
-            runtime = { version = 'LuaJIT', path = vim.split(package.path, ';') },
-            completion = { enable = true, callSnippet = "Both" },
-            diagnostics = {
-                enable = true,
-                globals = { 'vim' },
-                disable = { "lowercase-global" }
-            },
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME .. '/lua',
-                    vim.env.VIMRUNTIME .. '/lua/vim',
-                    vim.env.VIMRUNTIME .. '/lua/vim/lsp',
-                    require('packer').config.package_root
-                }
-            }
-        }
-    }
-})
 
 lsp.configure('rust_analyzer', {
     settings = {
@@ -140,19 +117,69 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '<Leader>vca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 
         if client.name == 'rust_analyzer' then
-            vim.keymap.set("n", "<Leader>m", expand_macro.expand_macro, { buffer = bufnr })
-            vim.keymap.set("v", "<Leader>f", expand_macro.extract_function, { buffer = bufnr })
+            vim.keymap.set("n", "<Leader>m", expand_macro.expand_macro, { buffer = event.buf})
+            vim.keymap.set("v", "<Leader>f", expand_macro.extract_function, { buffer = event.buf})
         end
     end,
 })
 
 lsp.setup()
 vim.lsp.inlay_hint.enable(true)
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
     function(server_name)
-      require('lspconfig')[server_name].setup({})
+        if server_name=='lua_ls' then
+            lspconfig[server_name].setup {
+                on_init = function(client)
+                    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                        runtime = { version = 'LuaJIT', path = vim.split(package.path, ';') },
+                        completion = { enable = true, callSnippet = "Both" },
+                        diagnostics = {
+                            enable = true,
+                            globals = { 'vim' },
+                            disable = { "lowercase-global" }
+                        },
+                        workspace = {
+                            -- Make the server aware of Neovim runtime files
+                            checkThirdParty = false,
+                            library = {
+                                vim.env.VIMRUNTIME .. '/lua',
+                                vim.env.VIMRUNTIME .. '/lua/vim',
+                                vim.env.VIMRUNTIME .. '/lua/vim/lsp',
+                                require('packer').config.package_root
+                            }
+                        }
+
+                    })
+                end,
+                settings = {
+                    Lua = {
+                        runtime = { version = 'LuaJIT', path = vim.split(package.path, ';') },
+                        completion = { enable = true, callSnippet = "Both" },
+                        diagnostics = {
+                            enable = true,
+                            globals = { 'vim' },
+                            disable = { "lowercase-global" }
+                        },
+                        workspace = {
+                            -- Make the server aware of Neovim runtime files
+                            checkThirdParty = false,
+                            library = {
+                                vim.env.VIMRUNTIME .. '/lua',
+                                vim.env.VIMRUNTIME .. '/lua/vim',
+                                vim.env.VIMRUNTIME .. '/lua/vim/lsp',
+                                require('packer').config.package_root
+                            }
+                        }
+                    }
+                }
+            }
+        else
+            require('lspconfig')[server_name].setup({})
+        end
+
     end,
   },
 })
@@ -164,3 +191,5 @@ vim.diagnostic.config({
 
 
 require("luasnip.loaders.from_lua").load({ paths = "~/.config/snippets" })
+
+
