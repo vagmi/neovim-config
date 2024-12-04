@@ -23,7 +23,6 @@ vim.o.signcolumn     = 'yes'
 vim.o.mouse          = 'a'
 -- Setup clipboard
 if vim.fn.has('unix') == 1 and vim.fn.executable('wl-copy') == 1 and vim.fn.executable('wl-paste') == 1 then
-    print('setting up clipboard')
     vim.g.clipboard = {
         name = 'wl-clipboard',
         copy = {

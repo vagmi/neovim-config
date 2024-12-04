@@ -162,7 +162,6 @@ return require('packer').startup(function()
             },
         },
         config = function()
-            print('setting up avante.nvim')
             require('avante_lib').load()
             require('avante').setup()
         end,
