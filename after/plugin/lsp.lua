@@ -10,10 +10,7 @@ lspconfig_defaults.capabilities = vim.tbl_deep_extend(
     require('cmp_nvim_lsp').default_capabilities()
 )
 
-require("copilot").setup({
-    -- suggestion = { enabled = false },
-    -- panel = { enabled = true },
-})
+require("copilot").setup()
 
 
 require('mason-lspconfig').setup({
@@ -22,7 +19,6 @@ require('mason-lspconfig').setup({
     ensure_installed = {
         'lua_ls',
         'rust_analyzer',
-        'kotlin_language_server',
     },
     handlers = {
         lsp.default_setup,
