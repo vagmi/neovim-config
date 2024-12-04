@@ -21,7 +21,25 @@ vim.o.showmode       = false
 vim.o.showtabline    = 2
 vim.o.signcolumn     = 'yes'
 vim.o.mouse          = 'a'
-vim.o.clipboard      = 'unnamedplus'
+-- Setup clipboard
+if vim.fn.has('unix') == 1 and vim.fn.executable('wl-copy') == 1 and vim.fn.executable('wl-paste') == 1 then
+    print('setting up clipboard')
+    vim.g.clipboard = {
+        name = 'wl-clipboard',
+        copy = {
+            ['+'] = 'wl-copy',
+            ['*'] = 'wl-copy',
+        },
+        paste = {
+            ['+'] = 'wl-paste',
+            ['*'] = 'wl-paste',
+        },
+        cache_enabled = 0,
+    }
+    vim.o.clipboard = 'unnamedplus'
+else
+    vim.o.clipboard = 'unnamedplus'
+end
 vim.o.exrc           = true
 
 vim.api.nvim_set_keymap('n', 'vs', ':vs<CR>', { noremap = true })
