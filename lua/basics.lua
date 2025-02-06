@@ -30,8 +30,8 @@ if vim.fn.has('unix') == 1 and vim.fn.executable('wl-copy') == 1 and vim.fn.exec
             ['*'] = 'wl-copy',
         },
         paste = {
-            ['+'] = 'wl-paste',
-            ['*'] = 'wl-paste',
+            ['+'] = 'wl-paste -n',
+            ['*'] = 'wl-paste -n',
         },
         cache_enabled = 0,
     }

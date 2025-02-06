@@ -109,7 +109,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
         vim.keymap.set("i", "<C-h>", vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', '<Leader>vrn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-        vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        -- Format using black for Python, fallback to LSP for other files
+        vim.keymap.set({ 'n', 'x' }, '<F3>', function()
+            if vim.bo.filetype == "python" and vim.fn.executable('black') == 1 then
+                print('using black for formatting')
+                vim.cmd('silent !black --quiet "%"')
+                vim.cmd('edit') -- reload the file
+            else
+                vim.lsp.buf.format({async = true})
+            end
+        end, opts)
         vim.keymap.set('n', '<Leader>vca', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 
         if client.name == 'rust_analyzer' then

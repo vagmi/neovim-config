@@ -98,6 +98,15 @@ return require('packer').startup(function()
             require('lspsaga').setup({})
         end,
     })
+
+    use({
+    "nvimtools/none-ls.nvim",
+    config = function()
+        require("null-ls").setup()
+    end,
+    requires = { "nvim-lua/plenary.nvim" },
+})
+
     -- use "github/copilot.vim"
     use "MunifTanjim/nui.nvim"
     use ({
